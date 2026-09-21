@@ -13,7 +13,7 @@ Please save your dataset in `data` folder. Note that CoNLL03 and WNUT17 are open
 All experiments are conducted under a 5-shot in-context learning setting.
 Therefore, `icl_cnt` is fixed to 5.
 
-Please review `generate.py` for P-ICL and `utils.py` for prompts, and change some important parameters.
+Please review `generate.py` for SGMR-NER and `utils.py` for prompts, and change some important parameters.
 ```{bash}
 python generate.py --dataset your_dataset --mode your_mode --picl_cnt your_picl_cnt --icl_cnt 5
 
