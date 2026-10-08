@@ -5,10 +5,24 @@ class Prompt:
     def __init__(self, dataset):
         self.dataset = dataset
 
-        if self.dataset not in ['CoNLL2003', 'ACE2004', 'ACE2005', 'WNUT2017']:
-            raise NotImplementedError(f'This dataset {self.dataset} is not used!')
+        # Datasets used in the paper
+        if self.dataset not in [
+            'CoNLL03',
+            'WNUT17',
+            'ACE04',
+            'ACE05',
+            'JNLPBA',
+            'BC5CDR'
+        ]:
+            raise NotImplementedError(
+                f'This dataset {self.dataset} is not used!'
+            )
 
-        if self.dataset == 'CoNLL2003':
+        # =========================================================
+        # CoNLL03
+        # Entity types: PER, ORG, LOC, MISC
+        # =========================================================
+        if self.dataset == 'CoNLL03':
             self.baseline_prompt = (
                 'Please list all named entities of the following entity types in the input sentence:\n'
                 '- PER\n'
@@ -27,7 +41,10 @@ class Prompt:
                 'Here are some examples:\n'
             )
 
-            self.icl_prompt2 = 'You should output your results in the format {"type": [entity]} as a json.'
+            self.icl_prompt2 = (
+                'You should output your results in the format '
+                '{"type": [entity]} as a json.'
+            )
 
             self.picl_prompt1 = (
                 'Please list all named entities of the following entity types in the input sentence:\n'
@@ -39,9 +56,17 @@ class Prompt:
 
             self.picl_prompt2 = self.icl_prompt2
 
-            self.fusion_prompt = self.picl_prompt1 + 'Here are some examples:\n'
+            self.fusion_prompt = (
+                self.picl_prompt1 + 'Here are some examples:\n'
+            )
 
-        elif self.dataset == 'WNUT2017':
+        # =========================================================
+        # WNUT17
+        # Entity types:
+        # person, location, corporation, product,
+        # creative-work, group
+        # =========================================================
+        elif self.dataset == 'WNUT17':
             self.baseline_prompt = (
                 'Please list all named entities of the following entity types in the input sentence:\n'
                 '- person\n'
@@ -53,12 +78,21 @@ class Prompt:
                 'You should output your results in the format {"type": [entity]} as a json.'
             )
 
-            self.icl_prompt1 = self.baseline_prompt.replace(
-                'You should output your results in the format {"type": [entity]} as a json.',
+            self.icl_prompt1 = (
+                'Please list all named entities of the following entity types in the input sentence:\n'
+                '- person\n'
+                '- location\n'
+                '- corporation\n'
+                '- product\n'
+                '- creative-work\n'
+                '- group\n'
                 'Here are some examples:\n'
             )
 
-            self.icl_prompt2 = 'You should output your results in the format {"type": [entity]} as a json.'
+            self.icl_prompt2 = (
+                'You should output your results in the format '
+                '{"type": [entity]} as a json.'
+            )
 
             self.picl_prompt1 = (
                 '- person: e.g. {person}\n'
@@ -71,11 +105,16 @@ class Prompt:
 
             self.picl_prompt2 = self.icl_prompt2
 
-            self.fusion_prompt = self.picl_prompt1 + 'Here are some examples:\n'
+            self.fusion_prompt = (
+                self.picl_prompt1 + 'Here are some examples:\n'
+            )
 
-        elif self.dataset == 'ACE2004' or self.dataset == 'ACE2005':
-
-            # ✅ 全部改为ACE标准标签
+        # =========================================================
+        # ACE04 / ACE05
+        # Entity types:
+        # PER, ORG, GPE, LOC, FAC, VEH, WEA
+        # =========================================================
+        elif self.dataset in ['ACE04', 'ACE05']:
             self.baseline_prompt = (
                 'Please list all named entities of the following entity types in the input sentence:\n'
                 '- PER (person)\n'
@@ -100,7 +139,10 @@ class Prompt:
                 'Here are some examples:\n'
             )
 
-            self.icl_prompt2 = 'You should output your results in the format {"type": [entity]} as a json.'
+            self.icl_prompt2 = (
+                'You should output your results in the format '
+                '{"type": [entity]} as a json.'
+            )
 
             self.picl_prompt1 = (
                 '- PER: e.g. {PER}\n'
@@ -114,11 +156,99 @@ class Prompt:
 
             self.picl_prompt2 = self.icl_prompt2
 
-            self.fusion_prompt = self.picl_prompt1 + 'Here are some examples:\n'
+            self.fusion_prompt = (
+                self.picl_prompt1 + 'Here are some examples:\n'
+            )
+
+        # =========================================================
+        # JNLPBA
+        # Entity types:
+        # DNA, RNA, protein, cell_type, cell_line
+        # =========================================================
+        elif self.dataset == 'JNLPBA':
+            self.baseline_prompt = (
+                'Please list all named entities of the following entity types in the input sentence:\n'
+                '- DNA\n'
+                '- RNA\n'
+                '- protein\n'
+                '- cell_type\n'
+                '- cell_line\n'
+                'You should output your results in the format {"type": [entity]} as a json.'
+            )
+
+            self.icl_prompt1 = (
+                'Please list all named entities of the following entity types in the input sentence:\n'
+                '- DNA\n'
+                '- RNA\n'
+                '- protein\n'
+                '- cell_type\n'
+                '- cell_line\n'
+                'Here are some examples:\n'
+            )
+
+            self.icl_prompt2 = (
+                'You should output your results in the format '
+                '{"type": [entity]} as a json.'
+            )
+
+            self.picl_prompt1 = (
+                '- DNA: e.g. {DNA}\n'
+                '- RNA: e.g. {RNA}\n'
+                '- protein: e.g. {protein}\n'
+                '- cell_type: e.g. {cell_type}\n'
+                '- cell_line: e.g. {cell_line}\n'
+            )
+
+            self.picl_prompt2 = self.icl_prompt2
+
+            self.fusion_prompt = (
+                self.picl_prompt1 + 'Here are some examples:\n'
+            )
+
+        # =========================================================
+        # BC5CDR
+        # Entity types: Chemical, Disease
+        # =========================================================
+        elif self.dataset == 'BC5CDR':
+            self.baseline_prompt = (
+                'Please list all named entities of the following entity types in the input sentence:\n'
+                '- Chemical\n'
+                '- Disease\n'
+                'You should output your results in the format {"type": [entity]} as a json.'
+            )
+
+            self.icl_prompt1 = (
+                'Please list all named entities of the following entity types in the input sentence:\n'
+                '- Chemical\n'
+                '- Disease\n'
+                'Here are some examples:\n'
+            )
+
+            self.icl_prompt2 = (
+                'You should output your results in the format '
+                '{"type": [entity]} as a json.'
+            )
+
+            self.picl_prompt1 = (
+                '- Chemical: e.g. {Chemical}\n'
+                '- Disease: e.g. {Disease}\n'
+            )
+
+            self.picl_prompt2 = self.icl_prompt2
+
+            self.fusion_prompt = (
+                self.picl_prompt1 + 'Here are some examples:\n'
+            )
 
 
 class PointICL:
-    def __init__(self, dataset, type2entity, point_entity_cnt, use_bert=False):
+    def __init__(
+        self,
+        dataset,
+        type2entity,
+        point_entity_cnt,
+        use_bert=False
+    ):
         self.dataset = dataset
         self.type2entity = type2entity
         self.cnt = point_entity_cnt
@@ -127,28 +257,38 @@ class PointICL:
 
     def safe_sample(self, key):
         """
-        支持大小写自动适配
+        Sample point entities while supporting automatic
+        case adaptation of entity type keys.
         """
-        # 优先原始 key
+
+        # Prefer the original key
         if key in self.type2entity:
             lst = self.type2entity[key]
-        # 尝试大写
+
+        # Try uppercase
         elif key.upper() in self.type2entity:
             lst = self.type2entity[key.upper()]
-        # 尝试小写
+
+        # Try lowercase
         elif key.lower() in self.type2entity:
             lst = self.type2entity[key.lower()]
+
+        # No matching entity type
         else:
             lst = []
 
-        return random.sample(lst, min(len(lst), self.cnt)) if lst else []
+        return (
+            random.sample(lst, min(len(lst), self.cnt))
+            if lst
+            else []
+        )
 
     def get_point_entity(self):
 
         # =========================================================
-        # CoNLL2003
+        # CoNLL03
         # =========================================================
-        if self.dataset == 'CoNLL2003':
+        if self.dataset == 'CoNLL03':
             self.point_entity = {
                 'per': self.safe_sample('PER'),
                 'org': self.safe_sample('ORG'),
@@ -157,9 +297,9 @@ class PointICL:
             }
 
         # =========================================================
-        # WNUT2017 ⭐（关键修复）
+        # WNUT17
         # =========================================================
-        elif self.dataset == 'WNUT2017':
+        elif self.dataset == 'WNUT17':
             self.point_entity = {
                 'person': self.safe_sample('PERSON'),
                 'location': self.safe_sample('LOCATION'),
@@ -170,9 +310,9 @@ class PointICL:
             }
 
         # =========================================================
-        # ACE2004 / ACE2005
+        # ACE04 / ACE05
         # =========================================================
-        elif self.dataset in ['ACE2004', 'ACE2005']:
+        elif self.dataset in ['ACE04', 'ACE05']:
             self.point_entity = {
                 'PER': self.safe_sample('PER'),
                 'ORG': self.safe_sample('ORG'),
@@ -181,6 +321,27 @@ class PointICL:
                 'FAC': self.safe_sample('FAC'),
                 'VEH': self.safe_sample('VEH'),
                 'WEA': self.safe_sample('WEA')
+            }
+
+        # =========================================================
+        # JNLPBA
+        # =========================================================
+        elif self.dataset == 'JNLPBA':
+            self.point_entity = {
+                'DNA': self.safe_sample('DNA'),
+                'RNA': self.safe_sample('RNA'),
+                'protein': self.safe_sample('protein'),
+                'cell_type': self.safe_sample('cell_type'),
+                'cell_line': self.safe_sample('cell_line')
+            }
+
+        # =========================================================
+        # BC5CDR
+        # =========================================================
+        elif self.dataset == 'BC5CDR':
+            self.point_entity = {
+                'Chemical': self.safe_sample('Chemical'),
+                'Disease': self.safe_sample('Disease')
             }
 
         return self.point_entity
